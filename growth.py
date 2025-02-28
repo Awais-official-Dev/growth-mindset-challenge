@@ -8,14 +8,14 @@ st.set_page_config(page_title= "Data Sweeper", layout="wide")
 
 # custom css
 st.markdown(
-"""
-<style>
-.stApp{
-background-color: black;
-color: white;
-}
-</style>
-"""
+        """
+        <style>
+        .stApp{
+          background-color: black;
+          color: white;
+          }
+          </style>
+          """,
 unsafe_allow_html=True
 )
 
