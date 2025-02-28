@@ -30,13 +30,13 @@ if uploaded_files:
     for file in uploaded_files:
         file_ext = os.path.splitext(file.name)[-1].lower()
 
-    if file_ext == ".csv":
-        df = pd.read_csv(file)
-    elif file_ext == ".xlsx":
-        df = pd.read_excel(file)
-    else:
-        st.error(f"unsupported file type: {file_ext}")
-        continue
+        if file_ext == ".csv":
+           df = pd.read_csv(file)
+        elif file_ext == ".xlsx":
+           df = pd.read_excel(file)
+        else:
+           st.error(f"unsupported file type: {file_ext}")
+           continue 
     #file data
     st.write("Preview the head of the Dataframe")
     st.dataframe(df.head())
