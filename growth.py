@@ -24,7 +24,7 @@ st.title("Data Sterling Integrator by Awais")
 st.write("Transform your files between CSV and Excel formats with built-in data cleaning and creating the project for Quarter 3!")
 
 #file uploader 
-uploaded_files = st.file_uploader("Upload your files (accepts CSV or Excel):", type=["cvs","xlsx"], accept_multiple_files=(True))
+uploaded_files = st.file_uploader("Upload your files (accepts CSV or Excel):", type=["csv","xlsx"], accept_multiple_files=(True))
 
 if uploaded_files:
     for file in uploaded_files:
