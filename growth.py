@@ -27,13 +27,14 @@ st.write("Transform your files between CSV and Excel formats with built-in data 
 uploaded_files = st.file_uploader("Upload your files (accepts CSV or Excel):", type=["csv","xlsx"], accept_multiple_files=(True))
 
 if uploaded_files:
+    dataframes = {} 
     for file in uploaded_files:
         file_ext = os.path.splitext(file.name)[-1].lower()
 
         if file_ext == ".csv":
-           df = pd.read_csv(file)
+           dataframes[file.name] = pd.read_csv(file)
         elif file_ext == ".xlsx":
-           df = pd.read_excel(file)
+           dataframes[file.name] = pd.read_excel(file)
         else:
            st.error(f"unsupported file type: {file_ext}")
            continue 
@@ -43,7 +44,7 @@ if uploaded_files:
 
     #data cleaning option
     st.subheader("Data Cleaning Option ")
-    if st.checkbox(f"Clean data for{file.name}"):
+    if st.checkbox(f"Clean data for {file.name}"):
         col1, col2 = st.columns(2)
 
         with col1:
@@ -70,20 +71,21 @@ if uploaded_files:
         #conversion option 
         st.subheader(" Conversion Options")
         conversion_type = st.radio(f"Convert {file.name} to:", ["csv", "Excel"], key=file.name)
-        if st.button(f"Convert{file.name}"):
+        if st.button(f"Convert {file.name}"):
             buffer = BytesIO()
             if conversion_type == "csv":
-                df.to.csv(buffer, index=False)
+                df.to_csv(buffer, index=False)
                 file_name = file.name.replace(file_ext, ".csv")
                 mime_type = "text/csv"
             elif conversion_type == "Excel":
-                df.to_excel(buffer, index=False)
+                df.to_excel(buffer, index=False, engine="openpyxl")
                 file_name = file.name.replace(file_ext, ".xlsx")
                 mime_type = "application/vnd.openxmlformats-officdocument.spreadsheetml.sheet"
             buffer.seek(0)
 
             st.download_button(
                 label=f"Download {file.name} as {conversion_type}",
+                data=buffer,
                 file_name = file_name,
                 mime= mime_type
             )
