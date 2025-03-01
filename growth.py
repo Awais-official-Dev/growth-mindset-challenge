@@ -44,7 +44,7 @@ if uploaded_files:
         st.dataframe(df.head())
     #data cleaning option
     st.subheader("Data Cleaning Option ")
-   for file_name, df in dataframes.items():
+    for file_name, df in dataframes.items():
        if st.checkbox(f"Clean data for {file.name}"):
         col1, col2 = st.columns(2)
 
@@ -75,12 +75,12 @@ if uploaded_files:
         if st.button(f"Convert {file.name}"):
             buffer = BytesIO()
             if conversion_type == "csv":
-                df.to_csv(buffer, index=False)
+                buffer.write(df.to_csv(index=False).encode())
                 file_name = file.name.replace(file_ext, ".csv")
                 mime_type = "text/csv"
             elif conversion_type == "Excel":
-         with pd.ExcelWriter(buffer, engine="openpyxl") as writer:  
-                df.to_excel(writer, index=False)
+                with pd.ExcelWriter(buffer, engine="openpyxl") as writer:  
+                    df.to_excel(writer, index=False)
 
                 file_name = file.name.replace(file_ext, ".xlsx")
                 mime_type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
