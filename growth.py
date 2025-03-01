@@ -39,12 +39,13 @@ if uploaded_files:
            st.error(f"unsupported file type: {file_ext}")
            continue 
     #file data
-    st.write("Preview the head of the Dataframe")
-    st.dataframe(df.head())
-
+    for file_name, df in dataframes.items():  # ✅ Har file ka dataframe loop me access karein
+        st.write(f"Preview for {file_name}")
+        st.dataframe(df.head())
     #data cleaning option
     st.subheader("Data Cleaning Option ")
-    if st.checkbox(f"Clean data for {file.name}"):
+   for file_name, df in dataframes.items():
+       if st.checkbox(f"Clean data for {file.name}"):
         col1, col2 = st.columns(2)
 
         with col1:
@@ -78,9 +79,11 @@ if uploaded_files:
                 file_name = file.name.replace(file_ext, ".csv")
                 mime_type = "text/csv"
             elif conversion_type == "Excel":
-                df.to_excel(buffer, index=False, engine="openpyxl")
+         with pd.ExcelWriter(buffer, engine="openpyxl") as writer:  
+                df.to_excel(writer, index=False)
+
                 file_name = file.name.replace(file_ext, ".xlsx")
-                mime_type = "application/vnd.openxmlformats-officdocument.spreadsheetml.sheet"
+                mime_type = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
             buffer.seek(0)
 
             st.download_button(
